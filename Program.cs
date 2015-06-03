@@ -96,7 +96,7 @@ namespace excel2json
                 //-- 导出JSON文件
                 if (options.JsonPath != null && options.JsonPath.Length > 0)
                 {
-                    JsonExporter exporter = new JsonExporter(sheet, header, options.Lowcase);
+                    JsonExporter exporter = new JsonExporter(sheet, header, options.Lowcase, options.Columns);
                     exporter.SaveToFile(options.JsonPath, cd);
                 }
 

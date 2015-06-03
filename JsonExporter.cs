@@ -12,21 +12,22 @@ namespace excel2json
     /// </summary>
     class JsonExporter
     {
-        Dictionary<string, Dictionary<string, object>> m_data;
+        List<Dictionary<string, object>> m_data;
 
         /// <summary>
         /// 构造函数：完成内部数据创建
         /// </summary>
         /// <param name="sheet">ExcelReader创建的一个表单</param>
         /// <param name="headerRows">表单中的那几行是表头</param>
-        public JsonExporter(DataTable sheet, int headerRows, bool lowcase)
+        public JsonExporter(DataTable sheet, int headerRows, bool lowcase, int columns)
         {
             if (sheet.Columns.Count <= 0)
                 return;
             if (sheet.Rows.Count <= 0)
                 return;
 
-            m_data = new Dictionary<string, Dictionary<string, object>>();
+            m_data = new List<Dictionary<string, object>>();
+            //m_data = new Dictionary<string, Dictionary<string, object>>();
 
             //--以第一列为ID，转换成ID->Object的字典
             int firstDataRow = headerRows - 1;
@@ -38,8 +39,9 @@ namespace excel2json
                     continue;
 
                 var rowData = new Dictionary<string, object>();
-                foreach (DataColumn column in sheet.Columns)
+                for (int j = 0; j < columns; j++)
                 {
+                    DataColumn column = sheet.Columns[j];
                     object value = row[column];
                     // 去掉数值字段的“.0”
                     if (value.GetType() == typeof(double))
@@ -50,14 +52,14 @@ namespace excel2json
                     }
                     string fieldName = column.ToString();
                     // 表头自动转换成小写
-                    if (lowcase)    
+                    if (lowcase)
                         fieldName = fieldName.ToLower();
 
                     if (!string.IsNullOrEmpty(fieldName))
                         rowData[fieldName] = value;
                 }
-
-                m_data[ID] = rowData;
+                m_data.Add(rowData);
+                //m_data[ID] = rowData;
             }
         }
 

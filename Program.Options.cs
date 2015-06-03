@@ -46,6 +46,13 @@ namespace excel2json
                 set;
             }
 
+            [Option('n', "columns", Required = true, HelpText = "表格中有几列.")]
+            public int Columns
+            {
+                get;
+                set;
+            }
+
             [Option('c', "encoding", Required = false, DefaultValue="utf8-nobom", HelpText = "指定编码的名称.")]
             public string Encoding
             {
